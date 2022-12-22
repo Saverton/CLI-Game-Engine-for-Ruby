@@ -2,8 +2,9 @@
 
 source 'https://rubygems.org'
 
-gem 'tty-reader'
+gem 'paint'
 gem 'require_all'
+gem 'tty-reader'
 
 group :development do
   gem 'pry'

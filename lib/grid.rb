@@ -33,6 +33,6 @@ class Grid
   end
 
   def render(canvas)
-    canvas.rectangle(pos: [0, 0], width: width + 2, height: height + 2, fill: false, char: '#')
+    canvas.rectangle(pos: [0, 0], dim: [width + 2, height + 2], fill: false, char: '#', color: :red)
   end
 end

@@ -33,10 +33,10 @@ class Snake
   def render(canvas, off_x, off_y)
     segments.each do |segment|
       on_screen_segment = [segment[0] + off_x, segment[1] + off_y]
-      canvas.point(pos: on_screen_segment, char: 'O')
+      canvas.point(pos: on_screen_segment, char: 'O', color: :green)
     end
     on_screen_head = [head[0] + off_x, head[1] + off_y]
-    canvas.point(pos: on_screen_head, char: head_char)
+    canvas.point(pos: on_screen_head, char: head_char, color: :green)
   end
 
   def head

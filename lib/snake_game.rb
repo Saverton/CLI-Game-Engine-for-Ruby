@@ -29,16 +29,16 @@ class SnakeGame < GameObject
     snake.render(canvas, 1, 1)
     food.render(canvas, 1, 1)
     grid.render(canvas)
-    canvas.print(str: " SCORE #{snake.size} ", pos: [1, 0])
+    canvas.print_str(str: " SCORE #{snake.size} ", pos: [1, 0])
     render_game_over if quit?
   end
 
   private
 
   def render_game_over
-    canvas.rectangle(pos: [3, 7], width: 16, height: 6, fill: true, char: ' ')
-    canvas.rectangle(pos: [3, 7], width: 16, height: 6, fill: false, char: '*')
-    canvas.print(str: 'GAME OVER', pos: [6, 9])
-    canvas.print(str: "SCORE #{snake.size}", pos: [7, 10])
+    canvas.rectangle(pos: [3, 7], dim: [16, 6], fill: true, char: ' ')
+    canvas.rectangle(pos: [3, 7], dim: [16, 6], fill: false, char: '*', color: :blue)
+    canvas.print_str(str: 'GAME OVER', pos: [6, 9], color: :yellow)
+    canvas.print_str(str: "SCORE #{snake.size}", pos: [7, 10], color: :yellow)
   end
 end
