@@ -9,14 +9,21 @@ class GameRunner
   end
 
   def run_game
+    puts 'GAME LOADING...'
     game_object.load
-    until game_object.quit?
-      game_object.update
-      game_object.render
-      system('clear') || system('cls')
-      game_object.draw
-      sleep 0.2
-    end
-    puts 'GAME ENDED'
+    run_frame until game_object.quit?
+    puts 'GAME TERMINATED'
+  end
+
+  private
+
+  def run_frame
+    game_object.reader.read_keypress(nonblock: true, echo: false)
+    game_object.update
+
+    game_object.render
+    game_object.draw
+
+    sleep game_object.frame_interval
   end
 end

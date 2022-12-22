@@ -13,11 +13,11 @@ class Grid
 
   def update
     if snake_eats_food?
-      food.spawn while snake.inside?(food.position)
+      food.spawn while snake.covers?(food.position)
       snake.grow
     end
 
-    raise SnakeDeadError.new, 'snake died, game over' if snake_dies?
+    raise SnakeDeadError.new, 'GAME OVER' if snake_dies?
   end
 
   def snake_eats_food?
@@ -29,10 +29,10 @@ class Grid
   end
 
   def snake_in_bounds?
-    snake.head[0] >= 0 && snake.head[0] < width && snake.head[1] >= 0 && snake.head[1] < height
+    (0...width).include?(snake.head[0]) && (0...height).include?(snake.head[1])
   end
 
   def render(canvas)
-    canvas.rectangle(x_pos: 0, y_pos: 0, width: width + 2, height: height + 2, fill: false, char: '#')
+    canvas.rectangle(pos: [0, 0], width: width + 2, height: height + 2, fill: false, char: '#')
   end
 end

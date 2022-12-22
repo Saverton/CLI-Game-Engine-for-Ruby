@@ -4,6 +4,9 @@
 class Canvas
   attr_reader :canvas, :c_width, :c_height
 
+  X = 0
+  Y = 1
+
   def initialize(width:, height:)
     @canvas = Array.new(height).map { Array.new(width) }
     @c_width = width
@@ -15,30 +18,28 @@ class Canvas
     canvas.each { |row| row.fill(' ') }
   end
 
-  def print(str:, x_pos:, y_pos:)
-    row = canvas[y_pos]
-    row.slice!(x_pos, str.length)
-    str.split('').reverse.each do |char|
-      row.insert(x_pos, char)
-    end
-    canvas[y_pos] = row.slice(0..(c_width - 1))
+  def print(str:, pos:)
+    row = insert_into_row(row: canvas[pos[Y]], arr: str.split(''), pos: pos)
+    canvas[pos[Y]] = row.slice(0...c_width)
   end
 
-  def rectangle(x_pos:, y_pos:, width:, height:, fill: false, char: '#')
-    (y_pos..(y_pos + height - 1)).each do |y_index|
-      if fill || y_index == y_pos || y_index == y_pos + height - 1
-        solid_line(char: char, x_pos: x_pos, y_pos: y_index, length: width)
+  def rectangle(pos:, width:, height:, fill: false, char: '#')
+    (pos[Y]...(pos[Y] + height)).each do |y_index|
+      if fill || y_index == pos[Y] || y_index == pos[Y] + height - 1
+        solid_line(char: char, pos: [pos[X], y_index], length: width)
       else
-        end_points(char: char, x_pos: x_pos, y_pos: y_index, length: width)
+        end_points(char: char, pos: [pos[X], y_index], length: width)
       end
     end
   end
 
-  def point(x_pos:, y_pos:, char:)
-    canvas[y_pos][x_pos] = char
+  def point(pos:, char:)
+    canvas[pos[Y]][pos[X]] = char
   end
 
+  # draws the canvas to the console
   def draw
+    system('clear') || system('cls')
     canvas.each do |row|
       puts row.join('')
     end
@@ -46,17 +47,21 @@ class Canvas
 
   private
 
-  def solid_line(char:, x_pos:, y_pos:, length:)
-    row = canvas[y_pos]
-    row.slice!(x_pos, length)
+  def solid_line(char:, pos:, length:)
+    row = canvas[pos[Y]]
+    row.slice!(pos[X], length)
     length.times do
-      row.insert(x_pos, char)
+      row.insert(pos[X], char)
     end
-    canvas[y_pos] = row.slice(0..(c_width - 1))
+    canvas[pos[Y]] = row.slice(0..(c_width - 1))
   end
 
-  def end_points(char:, x_pos:, y_pos:, length:)
-    canvas[y_pos][x_pos] = char
-    canvas[y_pos][x_pos + length - 1] = char if x_pos + length <= c_width
+  def end_points(char:, pos:, length:)
+    canvas[pos[Y]][pos[X]] = char
+    canvas[pos[Y]][pos[X] + length - 1] = char if pos[X] + length <= c_width
+  end
+
+  def insert_into_row(row:, arr:, pos:)
+    row.slice(0...pos[X]) + arr + row.slice(pos[X] + arr.length..)
   end
 end

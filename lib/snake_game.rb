@@ -19,25 +19,26 @@ class SnakeGame < GameObject
   end
 
   def update
-    super
     snake.update
-    begin
-      grid.update
-    rescue SnakeDeadError => _e
-      quit_game
-    end
+    grid.update
+  rescue SnakeDeadError => _e
+    quit_game
   end
 
   def render
     snake.render(canvas, 1, 1)
     food.render(canvas, 1, 1)
     grid.render(canvas)
-    canvas.print(str: " SCORE #{snake.size} ", x_pos: 1, y_pos: 0)
-    return unless quit?
+    canvas.print(str: " SCORE #{snake.size} ", pos: [1, 0])
+    render_game_over if quit?
+  end
 
-    canvas.rectangle(x_pos: 3, y_pos: 7, width: 16, height: 6, fill: true, char: ' ')
-    canvas.rectangle(x_pos: 3, y_pos: 7, width: 16, height: 6, fill: false, char: '*')
-    canvas.print(str: 'GAME OVER', x_pos: 6, y_pos: 9)
-    canvas.print(str: "SCORE #{snake.size}", x_pos: 7, y_pos: 10)
+  private
+
+  def render_game_over
+    canvas.rectangle(pos: [3, 7], width: 16, height: 6, fill: true, char: ' ')
+    canvas.rectangle(pos: [3, 7], width: 16, height: 6, fill: false, char: '*')
+    canvas.print(str: 'GAME OVER', pos: [6, 9])
+    canvas.print(str: "SCORE #{snake.size}", pos: [7, 10])
   end
 end
