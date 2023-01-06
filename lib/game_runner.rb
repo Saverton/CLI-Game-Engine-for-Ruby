@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'io/console'
+
 # Game Runner, takes a game object and runs it as a game
 class GameRunner
   attr_accessor :game_object
@@ -9,10 +11,13 @@ class GameRunner
   end
 
   def run_game
-    puts 'GAME LOADING...'
-    game_object.load
-    run_frame until game_object.quit?
-    puts 'GAME TERMINATED'
+    cursor = TTY::Cursor
+    cursor.invisible do
+      puts 'GAME LOADING...'
+      game_object.load
+      run_frame until game_object.quit?
+      puts 'GAME TERMINATED'
+    end
   end
 
   private

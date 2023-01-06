@@ -3,6 +3,7 @@
 # Canvas is simply a 2d array of chars, contains multiple instance methods for drawing shapes, text, and other objects.
 class Canvas
   attr_reader :canvas, :color_map, :c_width, :c_height
+  attr_accessor :last_canvas
 
   X = 0
   Y = 1
@@ -11,13 +12,16 @@ class Canvas
 
   def initialize(width:, height:)
     @canvas = Array.new(height).map { Array.new(width) }
+    @last_canvas = []
     @color_map = Array.new(height).map { Array.new(width) }
     @c_width = width
     @c_height = height
     clear
+    system('clear') || system('cls')
   end
 
   def clear
+    self.last_canvas = deep_copy(canvas)
     canvas.each { |row| row.fill(' ') }
     color_map.each { |row| row.fill(nil) }
   end
@@ -46,11 +50,13 @@ class Canvas
 
   # draws the canvas to the console
   def draw
-    system('clear') || system('cls')
+    cursor = TTY::Cursor
     canvas.each.with_index do |row, i|
       row.each.with_index do |char, j|
-        color = color_map[i][j] || :white
-        print Paint[char, color, :bright]
+        if last_canvas[i][j] != char
+          color = color_map[i][j] || :white
+          print cursor.move_to(j, i), Paint[char, color, :bright]
+        end
       end
       puts
     end
@@ -80,5 +86,13 @@ class Canvas
 
   def color_point(pos:, color:)
     color_map[pos[Y]][pos[X]] = color
+  end
+
+  def deep_copy(arr)
+    new_arr = []
+    arr.each do |element|
+      new_arr << (element.is_a?(Array) ? deep_copy(element) : element)
+    end
+    new_arr
   end
 end

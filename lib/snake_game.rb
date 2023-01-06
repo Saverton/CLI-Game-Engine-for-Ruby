@@ -5,7 +5,7 @@ class SnakeGame < GameObject
   attr_reader :snake, :food, :grid
 
   def initialize
-    super(width: 22, height: 22)
+    super(width: 22, height: 22, frame_interval: 0.15)
   end
 
   def load
@@ -38,7 +38,7 @@ class SnakeGame < GameObject
   def render_game_over
     canvas.rectangle(pos: [3, 7], dim: [16, 6], fill: true, char: ' ')
     canvas.rectangle(pos: [3, 7], dim: [16, 6], fill: false, char: '*', color: :blue)
-    canvas.print_str(str: 'GAME OVER', pos: [6, 9], color: :yellow)
+    canvas.print_str(str: 'GAME  OVER', pos: [6, 9], color: :yellow)
     canvas.print_str(str: "SCORE #{snake.size}", pos: [7, 10], color: :yellow)
   end
 end

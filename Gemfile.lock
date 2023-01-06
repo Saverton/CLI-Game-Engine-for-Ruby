@@ -23,6 +23,7 @@ DEPENDENCIES
   paint
   pry
   require_all
+  tty-cursor
   tty-reader
 
 BUNDLED WITH
