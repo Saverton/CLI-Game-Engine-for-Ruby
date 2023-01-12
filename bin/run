@@ -4,7 +4,7 @@
 require_relative '../config/environment'
 require 'io/console'
 
-game = SnakeGame.new
+game = GameObject.new
 
 runner = GameRunner.new(game)
 $stdin.noecho { runner.run_game }
